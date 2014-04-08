@@ -1,0 +1,6 @@
+.build/
+Nour-*
+.*.sw*
+.tmp/
+META.json
+Changes
