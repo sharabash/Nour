@@ -25,7 +25,7 @@ sub _build_base {
     my $base = $FindBin::Bin;
 
     while ( $base and not -e "$base/lib" ) {
-        $base =~ s:/[^/]+/?$::;
+        $base =~ s!/[^/]+/?$!!;
     }
 
     return $base;
@@ -34,10 +34,14 @@ sub _build_base {
 sub path {
     my ( $self, @path ) = @_;
     my ( $base ) = ( $self->base );
-
+    return $path[0]
+        if scalar @path eq 1    # if just one argument
+       and $path[0] =~ qr/^\//  # and appears absolute
+       and not -e "$base$path[0]" # and relative non-existence from the base
+       and -e $path[0]          # and absolute existence
+    ;
     @path = map { $_ =~ s/^\///; $_ =~ s/\/$//; $_ } @path;
     $base =~ s/\/$//;
-
     return join '/', $base, @path;
 }
 
