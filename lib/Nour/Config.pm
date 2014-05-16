@@ -5,6 +5,7 @@ use Moose;
 use namespace::autoclean;
 use YAML qw/LoadFile DumpFile/;
 use File::Find;
+use List::AllUtils qw/uniq/;
 
 with 'Nour::Base';
 
@@ -119,6 +120,11 @@ has _path => (
     , isa => 'HashRef'
 );
 
+has _path_list => (
+    is => 'rw'
+    , isa => 'ArrayRef'
+);
+
 around BUILDARGS => sub {
     my ( $next, $self, @args, $args ) = @_;
 
@@ -182,6 +188,8 @@ around BUILD => sub {
             }
         }, $path );
     }
+
+    $self->_path_list( [ uniq sort values %path ] );
 
     # Get config files and embedded configuration.
     for my $name ( keys %path ) {
