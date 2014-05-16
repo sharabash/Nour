@@ -5,6 +5,7 @@ package Nour::Base;
 use FindBin;
 use Moose::Role;
 use namespace::autoclean;
+use YAML qw/DumpFile/;
 use strict; use warnings;
 
 =head1 NAME
